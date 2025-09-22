@@ -1,0 +1,21 @@
+{
+  "name": "worker",
+  "private": true,
+  "scripts": {
+    "start": "ts-node src/main.ts",
+    "start:dev": "ts-node --transpile-only src/main.ts"
+  },
+  "dependencies": {
+    "bullmq": "^5.7.8",
+    "ioredis": "^5.3.2",
+    "@prisma/client": "^5.17.0",
+    "csv-parse": "^5.5.6",
+    "dayjs": "^1.11.10",
+    "axios": "^1.7.2"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5",
+    "prisma": "^5.17.0"
+  }
+}

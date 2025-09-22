@@ -1,0 +1,46 @@
+{
+  "info": {
+    "name": "Conciliacion API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Upload Extract",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/upload/extract",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "upload",
+            "extract"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Run Reconcile",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/reconcile/run",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "reconcile",
+            "run"
+          ]
+        }
+      }
+    }
+  ]
+}

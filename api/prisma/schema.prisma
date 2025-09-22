@@ -1,0 +1,73 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Invoice {
+  id         BigInt   @id @default(autoincrement())
+  number     String   @unique
+  customerId BigInt
+  currency   String   @default("COP")
+  total      Decimal
+  paid       Decimal  @default(0)
+  status     InvoiceStatus @default(OPEN)
+  issueDate  DateTime
+  dueDate    DateTime
+  embeddings InvoiceEmbedding?
+  matches    ReconciliationMatch[]
+  @@index([status])
+  @@index([issueDate])
+}
+
+enum InvoiceStatus {
+  OPEN
+  PARTIAL
+  PAID
+}
+
+model BankTransaction {
+  id        BigInt   @id @default(autoincrement())
+  bank      String
+  traceId   String?
+  postedAt  DateTime
+  amount    Decimal
+  currency  String   @default("COP")
+  description String
+  raw       Json?
+  dedupKey  String   @unique
+  matches   ReconciliationMatch[]
+  @@index([postedAt])
+  @@index([bank, postedAt])
+}
+
+model ReconciliationMatch {
+  id         BigInt  @id @default(autoincrement())
+  invoiceId  BigInt
+  bankTxId   BigInt
+  allocated  Decimal
+  score      Float
+  reasonCodes Json
+  createdAt  DateTime @default(now())
+  invoice    Invoice  @relation(fields: [invoiceId], references: [id])
+  bankTx     BankTransaction @relation(fields: [bankTxId], references: [id])
+  @@unique([invoiceId, bankTxId])
+}
+
+model ReconciliationRun {
+  id            BigInt @id @default(autoincrement())
+  startedAt     DateTime @default(now())
+  finishedAt    DateTime?
+  rulesetVersion String
+  modelVersion   String
+  metrics        Json
+}
+
+model InvoiceEmbedding {
+  invoiceId BigInt @id
+  embedding Unsupported("vector")
+  invoice   Invoice @relation(fields: [invoiceId], references: [id])
+}
